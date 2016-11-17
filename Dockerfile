@@ -20,10 +20,18 @@ RUN alternatives --set java /usr/java/jdk1.8.0_45/jre/bin/java
 RUN yum -y install git
 RUN curl https://bintray.com/sbt/rpm/rpm | tee /etc/yum.repos.d/bintray-sbt-rpm.repo 
 RUN yum -y install sbt
-RUN git clone https://github.com/apache/incubator-toree.git
+
+RUN git clone https://github.com/geotrellis/geotrellis.git
+RUN pushd geotrellis && \
+    ./sbt "project spark-etl" "set test in assembly := {}" assembly && \
+    popd
+# RUN cp geotrellis/spark-etl/target/scala-2.11/geotrellis*assembly*.jar jars/
+
+RUN git clone https://github.com/jpolchlo/incubator-toree.git
+ENV APACHE_SPARK_VERSION 2.0.1
 RUN pushd incubator-toree && \
-    APACHE_SPARK_VERSION=2.0.0 make build && \
-    APACHE_SPARK_VERSION=2.0.0 make dist && \
+    make build && \
+    make dist && \
     mkdir -p dist/toree-pip && \
     cp -r dist/toree dist/toree-pip && \
     cp dist/toree/LICENSE dist/toree-pip/LICENSE && \
@@ -40,16 +48,23 @@ RUN pushd incubator-toree && \
     scl enable python33 'pip install $(ls toree-*.tar.gz) && jupyter toree install' && \
     popd && \
     rm -rf dist/toree-pip/ && \
+    sbt "project toree-macros" publishLocal && \
+    sbt "project toree-plugins" publishLocal && \
+    sbt "project toree-kernel-api" publishLocal && \
     popd
 
-EXPOSE 7001
-EXPOSE 7002
-EXPOSE 7003
-EXPOSE 7004
-EXPOSE 7005
-EXPOSE 7006
-EXPOSE 7077
-EXPOSE 7777
-EXPOSE 6066
+COPY loader loader
+RUN pushd loader && \
+    mkdir /tmp/jars && \
+    sbt "run /tmp/jars" && \
+    find /tmp/jars -name \*.jar -exec cp {} /opt/spark/jars \; && \
+    rm -r /tmp/jars && \
+    popd
 
-CMD scl enable python33 'PYSPARK_PYTHON=python3 PYSPARK_DRIVER_PYTHON=jupyter PYSPARK_DRIVER_PYTHON_OPTS="notebook --no-browser --port=7777" pyspark --packages com.databricks:spark-csv_2.10:1.1.0 --executor-memory 6400M --driver-memory 6400M'
+ENV SPARK_PKGS $(cat << END | xargs echo | sed 's/ /,/g' com.databricks:spark-avro_2.11:3.0.1 END)
+
+EXPOSE 7777
+
+COPY scripts/entrypoint.sh /usr/local/sbin/
+ENTRYPOINT ["/usr/local/sbin/entrypoint.sh"]
+

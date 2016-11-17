@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+    spark-master:
+        image: quay.io/geodocker/spark:latest
+        networks: 
+            - jupyter
+        command: master
+        ports:
+            - 8080:8080
+            - 7077:7077
+    spark-worker:
+        image: quay.io/geodocker/spark
+        networks: 
+            - jupyter
+        command: worker
+        environment:
+            SPARK_MASTER: spark-master
+        depends_on: 
+            - spark-master
+    jupyter:
+        image: quay.io/geodocker/geotrellis-jupyter:latest
+        networks: 
+            - jupyter
+        depends_on: 
+            - spark-master
+            - spark-worker
+        environment:
+            SPARK_MASTER: spark-master
+            DISPLAY: $DISPLAY
+        ports:
+            - 7777:7777
+        volumes:
+            - /tmp/.X11-unix:/tmp/.X11-unix
+        command: 
+            '--master spark-master'
+
+networks:
+    jupyter:
+        driver: bridge

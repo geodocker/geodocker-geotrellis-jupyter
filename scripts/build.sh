@@ -25,7 +25,7 @@ scl enable python33 'pip install --upgrade notebook'
 
 # Install Toree
 scl enable python33 'pip install --pre /tmp/toree-0.2.0.dev1.tar.gz'
-scl enable python33 'jupyter toree install'
+scl enable python33 'jupyter toree install --spark_opts="--master local --jars /tmp/geotrellis-uberjar-assembly-1.0.0-RC1.jar"'
 rm /tmp/toree-0.2.0.dev1.tar.gz
 
 # Add User

@@ -9,10 +9,10 @@ IMG  := quay.io/${ORG}/${REPO}
 .PHONY all: build
 
 archives/${TOREE_VERSION}.zip:
-	(cd archives ; curl -L -C - -O "https://github.com/apache/incubator-toree/archive/${TOREE_VERSION}.zip")
+	(cd archives ; curl -L -O "https://github.com/apache/incubator-toree/archive/${TOREE_VERSION}.zip")
 
 spark-2.0.2-bin-hadoop2.7.tgz:
-	curl -L -C - -O "http://d3kbcqa49mib13.cloudfront.net/spark-2.0.2-bin-hadoop2.7.tgz"
+	curl -L -O "http://d3kbcqa49mib13.cloudfront.net/spark-2.0.2-bin-hadoop2.7.tgz"
 
 incubator-toree-${TOREE_VERSION}: archives/${TOREE_VERSION}.zip
 	rm -rf $@
@@ -24,10 +24,14 @@ incubator-toree-${TOREE_VERSION}/dist/toree-pip/toree-0.2.0.dev1.tar.gz: incubat
 toree-0.2.0.dev1.tar.gz: incubator-toree-${TOREE_VERSION}/dist/toree-pip/toree-0.2.0.dev1.tar.gz
 	cp $< $@
 
-.PHONY build: toree-0.2.0.dev1.tar.gz spark-2.0.2-bin-hadoop2.7.tgz
+geotrellis-uberjar-assembly-1.0.0-RC1.jar: geotrellis-uberjar/build.sbt
+	(cd geotrellis-uberjar ; ./sbt "assembly")
+	cp geotrellis-uberjar/target/scala-2.11/geotrellis-uberjar-assembly-1.0.0-RC1.jar $@
+
+build: toree-0.2.0.dev1.tar.gz spark-2.0.2-bin-hadoop2.7.tgz geotrellis-uberjar-assembly-1.0.0-RC1.jar
 	docker build -t ${IMG}:${SHA} .
 
-.PHONY publish: build
+publish: build
 	docker push ${IMG}:${SHA}
 	if [ "${TAG}" != "" -a "${TAG}" != "${SHA}" ]; then docker tag ${IMG}:${SHA} ${IMG}:${TAG} && docker push ${IMG}:${TAG}; fi
 

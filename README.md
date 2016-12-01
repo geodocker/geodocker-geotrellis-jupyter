@@ -21,7 +21,7 @@ After a few moments, the server should be available at [`localhost:8000`](http:/
 #### With GeoDocker ####
 
 First ensure that the `docker-compose` command is installed and working.
-With that command present, simply navigate into a directory containing the appropriate [`docker-compose.yml`](docker-compose.yml) file bring the "cluster" up
+With that command present, simply navigate into a directory containing the appropriate [`docker-compose.yml`](docker-compose.yml) file and bring the "cluster" up
 
 ```bash
 cd ~/local/src/geodocker-geotrellis-jupyter
@@ -54,10 +54,10 @@ scl enable python33 'jupyter toree install --spark_opts="--master spark://10.0.1
 
 In stand-alone mode, the version of Spark in the image (currently 2.0.0) must match the version installed on the cluster.
 If that is not true, then it is be necessary to create a new image
-(either derived from this one in the docker-sense or built from a fork of this source distribution)
+(either derived from this one [in the docker-sense] or built from a fork of this source distribution)
 with the appropriate version of Spark installed.
 
-To run with `jupyterhub` with SSL enabled, the [JupyterHub documentation](https://github.com/jupyterhub/jupyterhub) suggests something like this
+To run `jupyterhub` with SSL enabled, the [JupyterHub documentation](https://github.com/jupyterhub/jupyterhub) suggests something like this
 
 ```bash
 jupyterhub --ip 10.0.1.2 --port 443 --ssl-key my_ssl.key --ssl-cert my_ssl.cert
@@ -66,7 +66,7 @@ jupyterhub --ip 10.0.1.2 --port 443 --ssl-key my_ssl.key --ssl-cert my_ssl.cert
 Please see the JupyterHub documentation for more detailed discussion;
 The steps/suggestions given here are probably necessary but almost certainly not sufficient to produce a working setup.
 
-The [`geodocker.sh`](scripts/geodocker.sh) is an example of a script which reinstalls Toree then launches JupyerHub.
+The [`geodocker.sh`](scripts/geodocker.sh) script is an example of a script which reinstalls Toree then launches JupyerHub.
 For serious usage, it will probably be necessary to create another docker image derived form this one.
 That image should contain site-specific configuration files and a script similar to `scripts/geodocker.sh` with the appropriate configuration and launch commands encapsulated within.
 

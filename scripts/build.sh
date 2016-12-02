@@ -3,8 +3,7 @@
 yum -y update
 
 # Install Python
-yum -y install scl-utils
-rpm -Uvh https://www.softwarecollections.org/en/scls/rhscl/python33/epel-7-x86_64/download/rhscl-python33-epel-7-x86_64.noarch.rpm
+yum -y install centos-release-scl
 yum -y install python33
 scl enable python33 'easy_install pip'
 echo '/opt/rh/python33/root/usr/lib64' >> /etc/ld.so.conf
@@ -20,7 +19,7 @@ yum -y install nodejs
 # Install JupyterHub and Jupyter
 yum -y install gcc gcc-c++
 npm install -g configurable-http-proxy
-scl enable python33 'pip install jupyterhub'
+scl enable python33 'pip install jupyterhub==0.6.0'
 scl enable python33 'pip install --upgrade notebook'
 
 # Install Toree

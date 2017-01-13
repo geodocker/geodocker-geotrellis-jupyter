@@ -20,8 +20,7 @@ yum -y install nodejs
 # Install JupyterHub and Jupyter
 yum -y install gcc gcc-c++
 npm install -g configurable-http-proxy
-scl enable rh-python35 'pip install jupyterhub==0.7.2'
-scl enable rh-python35 'pip install --upgrade notebook'
+scl enable rh-python35 'pip install -r /tmp/requirements.txt'
 
 # Install Toree
 scl enable rh-python35 'pip install --pre /tmp/toree-0.2.0.dev1.tar.gz'

@@ -11,6 +11,10 @@ COPY geotrellis-uberjar-assembly-1.0.0-RC1.jar /tmp
 
 RUN /scripts/build.sh
 
+RUN mkdir /opt/notebooks
+RUN chown -R jack:jack /opt/notebooks
 EXPOSE 8000
+USER jack
+WORKDIR /opt/notebooks
 
-CMD scl enable python33 'jupyterhub --no-ssl'
+CMD cd /opt/notebooks & scl enable rh-python35 'jupyterhub --no-ssl --Spawner.notebook_dir=/opt/notebooks'

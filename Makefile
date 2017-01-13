@@ -12,7 +12,7 @@ archives/${TOREE_VERSION}.zip:
 	(cd archives ; curl -L -O "https://github.com/apache/incubator-toree/archive/${TOREE_VERSION}.zip")
 
 spark-2.0.0-bin-hadoop2.7.tgz:
-	curl -L -O "http://d3kbcqa49mib13.cloudfront.net/spark-2.0.0-bin-hadoop2.7.tgz"
+	curl -L -O "http://d3kbcqa49mib13.cloudfront.net/spark-2.1.0-bin-hadoop2.7.tgz"
 
 incubator-toree-${TOREE_VERSION}: archives/${TOREE_VERSION}.zip
 	rm -rf $@
@@ -30,6 +30,9 @@ geotrellis-uberjar-assembly-1.0.0-RC1.jar: geotrellis-uberjar/build.sbt
 
 build: toree-0.2.0.dev1.tar.gz spark-2.0.0-bin-hadoop2.7.tgz geotrellis-uberjar-assembly-1.0.0-RC1.jar
 	docker build -t ${IMG}:${SHA} .
+
+run:
+	docker run -it -v $(CURDIR)/notebooks:/opt/notebooks -p 8000:8000 quay.io/geodocker/geotrellis-jupyter:9b577f1
 
 publish: build
 	docker push ${IMG}:${SHA}

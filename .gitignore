@@ -5,3 +5,9 @@ incubator-toree-*/
 toree-0.2.0.dev1.tar.gz
 spark-*.tgz
 geotrellis-uberjar-assembly-*.jar
+.ipynb_checkpoints/
+\#*#
+*~
+.#*
+
+notebooks/

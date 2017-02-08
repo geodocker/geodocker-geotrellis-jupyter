@@ -16,10 +16,11 @@ RUN /scripts/install-nodejs.sh
 COPY scripts/install-jupyter.sh /scripts/
 RUN /scripts/install-jupyter.sh
 
+COPY kernels/ /usr/local/share/jupyter/kernels/
 RUN mkdir /opt/notebooks
 RUN chown -R jack:jack /opt/notebooks
 EXPOSE 8000
 USER jack
 WORKDIR /opt/notebooks
 
-CMD cd /opt/notebooks & scl enable rh-python35 'jupyterhub --no-ssl --Spawner.notebook_dir=/opt/notebooks'
+CMD ["jupyterhub", "--no-ssl", "--Spawner.notebook_dir=/opt/notebooks"]

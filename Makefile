@@ -1,4 +1,5 @@
 TOREE_VERSION := 9b577f19df83dab95419b781de710ea2a393202a
+SPARK_VERSION := 2.1.0-bin-hadoop2.7
 SHA := $(shell echo ${TOREE_VERSION} | sed 's,\(.......\).*,\1,')
 BASE := $(subst -, ,$(notdir ${CURDIR}))
 ORG  := $(word 1, ${BASE})
@@ -11,8 +12,8 @@ IMG  := quay.io/${ORG}/${REPO}
 archives/${TOREE_VERSION}.zip:
 	(cd archives ; curl -L -O "https://github.com/apache/incubator-toree/archive/${TOREE_VERSION}.zip")
 
-spark-2.1.0-bin-hadoop2.7.tgz:
-	curl -L -O "http://d3kbcqa49mib13.cloudfront.net/spark-2.1.0-bin-hadoop2.7.tgz"
+spark-${SPARK_VERSION}.tgz:
+	curl -L -O "http://d3kbcqa49mib13.cloudfront.net/spark-${SPARK_VERSION}.tgz"
 
 incubator-toree-${TOREE_VERSION}: archives/${TOREE_VERSION}.zip
 	rm -rf $@

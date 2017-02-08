@@ -30,10 +30,17 @@ geotrellis-uberjar-assembly-1.0.0-RC1.jar: geotrellis-uberjar/build.sbt
 	cp geotrellis-uberjar/target/scala-2.11/geotrellis-uberjar-assembly-1.0.0-RC1.jar $@
 
 build: toree-0.2.0.dev1.tar.gz spark-2.1.0-bin-hadoop2.7.tgz geotrellis-uberjar-assembly-1.0.0-RC1.jar
-	docker build --no-cache -t ${IMG}:${SHA} .
+	docker build -t ${IMG}:latest .
 
 run:
-	docker run -it -v $(CURDIR)/notebooks:/opt/notebooks -p 8000:8000 quay.io/geodocker/geotrellis-jupyter:9b577f1
+	docker run --rm --name jupyter  -it -p 8000:8000 -v $(CURDIR)/notebooks:/opt/notebooks ${IMG}:latest ${CMD}
+
+exec:
+	docker exec -it -u root jupyter bash
+
+reset:
+	docker kill jupyter
+	docker rm jupyter
 
 publish: build
 	docker push ${IMG}:${SHA}

@@ -1,0 +1,17 @@
+{
+    "language": "python",
+    "display_name": "GeoPySpark",
+    "argv": [
+        "python3",
+         "-m",
+        "ipykernel",
+        "-f",
+        "{connection_file}"
+    ],
+    "env": {
+        "SPARK_HOME": "/opt/spark",
+        "PYTHONPATH": "/opt/spark/python/:/opt/spark/python/lib/py4j-0.10.1-src.zip",
+        "PYTHONSTARTUP": "/opt/spark/python/pyspark/shell.py",
+        "PYSPARK_SUBMIT_ARGS": "--master local[*] --jars /work/geopyspark/geopyspark-backend/geotrellis/target/scala-2.11/geotrellis-backend-assembly-0.1.0.jar pyspark-shell"
+ }
+}

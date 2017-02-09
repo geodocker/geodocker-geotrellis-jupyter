@@ -4,9 +4,11 @@ yum -y update
 
 # Install Python
 yum -y install centos-release-scl
-yum -y install python33
-scl enable python33 'easy_install pip'
-echo '/opt/rh/python33/root/usr/lib64' >> /etc/ld.so.conf
+yum-config-manager --enable rhel-server-rhscl-7-rpms
+yum -y install rh-python35
+scl enable rh-python35 'easy_install pip'
+scl enable rh-python35 'pip install --upgrade pip'
+echo '/opt/rh/rh-python35/root/usr/lib64' >> /etc/ld.so.conf
 ldconfig
 
 # Install Java
@@ -19,12 +21,20 @@ yum -y install nodejs
 # Install JupyterHub and Jupyter
 yum -y install gcc gcc-c++
 npm install -g configurable-http-proxy
-scl enable python33 'pip install -r /tmp/requirements.txt'
+scl enable rh-python35 'pip install -r /tmp/requirements.txt'
 
 # Install Toree
-scl enable python33 'pip install --pre /tmp/toree-0.2.0.dev1.tar.gz'
-scl enable python33 'jupyter toree install --spark_opts="--master local --jars /tmp/geotrellis-uberjar-assembly-1.0.0-RC1.jar"'
+scl enable rh-python35 'pip install --pre /tmp/toree-0.2.0.dev1.tar.gz'
+scl enable rh-python35 'jupyter toree install --spark_opts="--master local --jars /tmp/geotrellis-uberjar-assembly-1.0.0-RC1.jar"'
 rm /tmp/toree-0.2.0.dev1.tar.gz
+
+# Install GeoPySpark's dependencies
+yum -y install epel-release
+yum -y repolist
+yum -y install geos-devel lapack-devel atlas-devel blas-devel
+scl enable rh-python35 'pip install numpy'
+scl enable rh-python35 'pip3 install "shapely>=1.6b3"'
+scl enable rh-python35 'pip3 install "avro-python3>=1.8"'
 
 # Add User
 useradd jack -m 

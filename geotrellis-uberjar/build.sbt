@@ -32,7 +32,11 @@ lazy val commonSettings = Seq(
     case _ => MergeStrategy.first
   },
   shellPrompt := { s => Project.extract(s).currentProject.id + " > " },
-  resolvers += "LocationTech GeoTrellis Releases" at "https://repo.locationtech.org/content/repositories/geotrellis-releases",
+  resolvers ++= Seq(
+    "LocationTech GeoTrellis Releases" at "https://repo.locationtech.org/content/repositories/geotrellis-releases",
+    "OSGeo repository" at "http://download.osgeo.org/webdav/geotools/",
+    "Geosolutions" at "http://maven.geo-solutions.it"
+  ),
   libraryDependencies ++= Seq(
     "org.locationtech.geotrellis" %% "geotrellis-accumulo" % Version.geotrellis,
     "org.locationtech.geotrellis" %% "geotrellis-cassandra" % Version.geotrellis,

@@ -1,21 +1,26 @@
 FROM centos:7
 
-MAINTAINER Justin Polchlopek <jpolchlopek@azavea.com>
-
 ENV SPARK_HOME /usr/local/spark-2.1.0-bin-hadoop2.7
 
 ADD spark-2.1.0-bin-hadoop2.7.tgz /usr/local
-ADD scripts/*.sh /scripts/
 COPY scripts/requirements.txt /tmp
 COPY toree-0.2.0.dev1.tar.gz /tmp
-COPY geotrellis-uberjar-assembly-1.0.0-RC1.jar /tmp
 
-RUN /scripts/build.sh
+RUN yum -y install java-1.8.0-openjdk
+COPY scripts/install-python.sh /scripts/
+RUN /scripts/install-python.sh
 
+COPY scripts/install-nodejs.sh /scripts/
+RUN /scripts/install-nodejs.sh
+
+COPY scripts/install-jupyter.sh /scripts/
+RUN /scripts/install-jupyter.sh
+
+COPY kernels/ /usr/local/share/jupyter/kernels/
 RUN mkdir /opt/notebooks
 RUN chown -R jack:jack /opt/notebooks
 EXPOSE 8000
 USER jack
 WORKDIR /opt/notebooks
 
-CMD cd /opt/notebooks & scl enable rh-python35 'jupyterhub --no-ssl --Spawner.notebook_dir=/opt/notebooks'
+CMD ["jupyterhub", "--no-ssl", "--Spawner.notebook_dir=/opt/notebooks"]

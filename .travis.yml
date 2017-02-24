@@ -1,0 +1,34 @@
+sudo: required
+language: bash
+services:
+- docker
+env:
+  global:
+  - DOCKER_COMPOSE_VERSION=1.8.0
+  - ORG=${TRAVIS_REPO_SLUG%/*}
+  - REPO=${TRAVIS_REPO_SLUG##*-}
+  - TAG=${TRAVIS_TAG:-${TRAVIS_COMMIT:0:7}}
+before_install:
+- curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+- chmod +x docker-compose
+- sudo mv -f docker-compose /usr/local/bin
+install:
+- make -e build
+script:
+- make -e test
+before_deploy:
+- docker login -p "${QUAY_PASSWORD}" -u "${QUAY_USER}" quay.io
+deploy:
+- provider: script
+  script: make -e publish
+  skip_cleanup: true
+  on:
+    branch: master
+- provider: script
+  script: make -e publish
+  skip_cleanup: true
+  on:
+    tags: true
+
+
+

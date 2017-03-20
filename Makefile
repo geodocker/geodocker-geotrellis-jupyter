@@ -26,6 +26,7 @@ reset:
 
 publish: build
 	docker push ${IMG}:${VERSION}
-	if [ "${TAG}" != "" -a "${TAG}" != "${VERSION}" ]; then docker tag ${IMG}:${VERSION} ${IMG}:${TAG} && docker push ${IMG}:${TAG}; fi
+	docker tag ${IMG}:${VERSION} ${IMG}:latest
+	if [ "${TAG}" != "" -a "${TAG}" != "${VERSION}" ]; then docker tag ${IMG}:${VERSION} ${IMG}:${TAG} && docker push ${IMG}:${TAG} && docker push ${IMG}:latest; fi
 
 test: build

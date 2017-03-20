@@ -13,7 +13,7 @@ Starting this image in toy settings (e.g. with a "cluster" confined entirely to 
 To use the image with a self-contained local master, type
 
 ```bash
-docker run -it --rm -p 8000:8000 quay.io/geodocker/geotrellis-jupyter:9b577f1
+docker run -it --rm -p 8000:8000 quay.io/geodocker/jupyter:0
 ```
 
 After a few moments, the server should be available at [`localhost:8000`](http://localhost:8000).

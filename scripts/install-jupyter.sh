@@ -9,5 +9,5 @@ pip3 install -r /tmp/requirements.txt
 ln -s $SPARK_HOME /usr/local/spark
 
 # Add User
-useradd jack -m
-echo 'jack:jack' | chpasswd
+useradd hadoop -m
+echo 'hadoop:hadoop' | chpasswd

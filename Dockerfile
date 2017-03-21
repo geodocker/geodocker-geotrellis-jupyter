@@ -1,8 +1,9 @@
 FROM centos:7
 
-ENV SPARK_HOME /usr/local/spark-2.1.0-bin-hadoop2.7
+ARG SPARK_VERSION
+ENV SPARK_HOME /usr/local/spark-${SPARK_VERSION}
 
-ADD spark-2.1.0-bin-hadoop2.7.tgz /usr/local
+ADD spark-${SPARK_VERSION}.tgz /usr/local
 COPY scripts/requirements.txt /tmp
 COPY scripts/install-python.sh /scripts/
 COPY scripts/install-nodejs.sh /scripts/

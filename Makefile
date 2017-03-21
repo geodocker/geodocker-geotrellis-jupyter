@@ -11,8 +11,8 @@ IMG  := quay.io/${ORG}/${REPO}
 spark-${SPARK_VERSION}.tgz:
 	curl -L -O "http://d3kbcqa49mib13.cloudfront.net/spark-${SPARK_VERSION}.tgz"
 
-build: spark-2.1.0-bin-hadoop2.7.tgz
-	docker build -t ${IMG}:${VERSION} .
+build: spark-${SPARK_VERSION}.tgz
+	docker build --build-arg SPARK_VERSION=${SPARK_VERSION} -t ${IMG}:${VERSION} .
 
 run:
 	docker run --rm -it --name jupyter -p 8000:8000 -v $(CURDIR)/notebooks:/opt/notebooks ${IMG}:${VERSION} ${CMD}

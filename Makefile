@@ -1,4 +1,4 @@
-VERSION := 1
+VERSION := 2
 SPARK_VERSION := 2.1.0-bin-hadoop2.7
 BASE := $(subst -, ,$(notdir ${CURDIR}))
 ORG  := geodocker

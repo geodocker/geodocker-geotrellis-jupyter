@@ -1,25 +1,22 @@
 FROM centos:7
 
-ENV SPARK_HOME /usr/local/spark-2.1.0-bin-hadoop2.7
+ARG SPARK_VERSION
+ENV SPARK_HOME /usr/local/spark-${SPARK_VERSION}
 
-ADD spark-2.1.0-bin-hadoop2.7.tgz /usr/local
+ADD spark-${SPARK_VERSION}.tgz /usr/local
 COPY scripts/requirements.txt /tmp
-
-RUN yum -y install java-1.8.0-openjdk
 COPY scripts/install-python.sh /scripts/
-RUN /scripts/install-python.sh
-
 COPY scripts/install-nodejs.sh /scripts/
-RUN /scripts/install-nodejs.sh
-
 COPY scripts/install-jupyter.sh /scripts/
-RUN /scripts/install-jupyter.sh
-
+COPY scripts/install-all.sh /scripts/
 COPY kernels/ /usr/local/share/jupyter/kernels/
-RUN mkdir /opt/notebooks
-RUN chown -R jack:jack /opt/notebooks
+
+RUN /scripts/install-all.sh && mkdir /opt/notebooks && chown -R hadoop:hadoop /opt/notebooks
+
 EXPOSE 8000
-USER jack
+
+USER hadoop
+
 WORKDIR /opt/notebooks
 
 CMD ["jupyterhub", "--no-ssl", "--Spawner.notebook_dir=/opt/notebooks"]

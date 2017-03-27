@@ -10,5 +10,5 @@ ln -s $SPARK_HOME /usr/local/spark
 
 # Add User
 useradd hadoop -m
-usermod -a -G hadoop root
+usermod -a -G root hadoop
 echo 'hadoop:hadoop' | chpasswd

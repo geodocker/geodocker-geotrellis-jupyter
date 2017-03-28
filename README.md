@@ -7,7 +7,7 @@ A Docker container to provide a Jupyter notebook instance with GeoTrellis functi
 To use the image with a self-contained local master, type
 
 ```bash
-docker run -it --rm -p 8000:8000 quay.io/geodocker/jupyter:2
+docker run -it --rm -p 8000:8000 quay.io/geodocker/jupyter:3
 ```
 
 After a few moments, the server should be available at [`localhost:8000`](http://localhost:8000).

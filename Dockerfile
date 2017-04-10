@@ -11,7 +11,11 @@ COPY scripts/install-jupyter.sh /scripts/
 COPY scripts/install-all.sh /scripts/
 COPY kernels/ /usr/local/share/jupyter/kernels/
 
-RUN /scripts/install-all.sh && mkdir /opt/notebooks && chown -R hadoop:hadoop /opt/notebooks
+RUN /scripts/install-all.sh && \
+    mkdir /opt/notebooks && \
+    chown -R hadoop:hadoop /opt/notebooks && \
+    mkdir -p /usr/etc/jupyter /usr/share/jupyter && \
+    chown -R hadoop:hadoop /usr/etc/jupyter /usr/share/jupyter
 
 EXPOSE 8000
 

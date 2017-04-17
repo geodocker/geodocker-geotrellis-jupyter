@@ -22,6 +22,10 @@ install:
 script:
    - make -e test
 
+cache:
+   directories:
+      - ./archives/
+
 before_deploy:
 - docker login -p "${QUAY_PASSWORD}" -u "${QUAY_USER}" quay.io
 deploy:

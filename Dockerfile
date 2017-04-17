@@ -20,7 +20,6 @@ RUN ln -s ${SPARK_HOME} /usr/local/spark && \
     useradd hadoop -m && \
     usermod -a -G root hadoop && \
     (echo 'hadoop:hadoop' | chpasswd) && \
-    (mkdir -p /opt/notebooks ; chown hadoop:hadoop -R /opt/notebooks) && \
     yum clean all
 RUN pip3 install -r /tmp/requirements-1.txt && \
     (pushd /tmp/ipykernel ; patch -p1 < /tmp/patch.diff ; pip3 install . ; popd) && \

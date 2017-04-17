@@ -1,14 +1,8 @@
-lib/
-target/
 archives/*.zip
-incubator-toree-*/
-toree-0.2.0.dev1.tar.gz
-spark-*.tgz
-geotrellis-uberjar-assembly-*.jar
+archives/spark-*.tgz
+archives/*.tar
 .ipynb_checkpoints/
 \#*#
 *~
 .#*
-
 notebooks/
-toree

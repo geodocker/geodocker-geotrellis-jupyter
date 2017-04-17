@@ -8,10 +8,16 @@ IMG  := quay.io/${ORG}/${REPO}
 
 .PHONY all: build
 
-spark-${SPARK_VERSION}.tgz:
-	curl -L -O "http://d3kbcqa49mib13.cloudfront.net/spark-${SPARK_VERSION}.tgz"
+archives/spark-${SPARK_VERSION}.tgz:
+	(cd archives ; curl -L -O "http://d3kbcqa49mib13.cloudfront.net/spark-${SPARK_VERSION}.tgz")
 
-build: spark-${SPARK_VERSION}.tgz
+archives/629ac54cae9767310616d47d769665453619ac64.zip:
+	(cd archives ; curl -L -O "https://github.com/ipython/ipykernel/archive/629ac54cae9767310616d47d769665453619ac64.zip")
+
+archives/ipykernel.tar: archives/629ac54cae9767310616d47d769665453619ac64.zip
+	(cd archives ; unzip 629ac54cae9767310616d47d769665453619ac64.zip ; mv ipykernel-629ac54cae9767310616d47d769665453619ac64 ipykernel ; tar cvf ipykernel.tar ipykernel/ ; rm -rf ipykernel/)
+
+build: archives/ipykernel.tar archives/spark-${SPARK_VERSION}.tgz
 	docker build --build-arg SPARK_VERSION=${SPARK_VERSION} -t ${IMG}:${VERSION} .
 
 run:

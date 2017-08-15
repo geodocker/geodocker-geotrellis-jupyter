@@ -35,7 +35,7 @@ reset:
 	docker rm jupyter
 
 publish: build
-	docker tag "$(IMG):$(TAG)" "$(IMGf):latest"
+	docker tag "$(IMG):$(TAG)" "$(IMG):latest"
 	docker push "$(IMG):$(TAG)"
 	docker push "$(IMG):latest"
 

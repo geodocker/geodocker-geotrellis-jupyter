@@ -25,6 +25,11 @@ RUN pip3 install -r /tmp/requirements-1.txt && \
     (pushd /tmp/ipykernel ; patch -p1 < /tmp/patch.diff ; pip3 install . ; popd) && \
     pip3 install -r /tmp/requirements-2.txt && \
     rm -rf /root/cache /tmp/*
+RUN pip3 install "https://github.com/jupyterhub/oauthenticator/archive/f5e39b1ece62b8d075832054ed3213cc04f85030.zip"
+
+COPY config/jupyterhub_config_generic.py /etc/jupterhub/
+COPY config/jupyterhub_config_github.py /etc/jupterhub/
+COPY config/jupyterhub_config_google.py /etc/jupterhub/
 
 EXPOSE 8000
 

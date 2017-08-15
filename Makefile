@@ -1,4 +1,4 @@
-VERSION := 4
+TAG ?= 5
 SPARK_VERSION := 2.1.0-bin-hadoop2.7
 BASE := $(subst -, ,$(notdir ${CURDIR}))
 ORG  := geodocker
@@ -18,10 +18,14 @@ archives/ipykernel.tar: archives/629ac54cae9767310616d47d769665453619ac64.zip
 	(cd archives ; unzip 629ac54cae9767310616d47d769665453619ac64.zip ; mv ipykernel-629ac54cae9767310616d47d769665453619ac64 ipykernel ; tar cvf ipykernel.tar ipykernel/ ; rm -rf ipykernel/)
 
 build: archives/ipykernel.tar archives/spark-${SPARK_VERSION}.tgz
-	docker build --build-arg SPARK_VERSION=${SPARK_VERSION} -t ${IMG}:${VERSION} .
+	docker build --build-arg SPARK_VERSION=${SPARK_VERSION} -t ${IMG}:${TAG} .
 
 run:
-	docker run --rm -it --name jupyter -p 8000:8000 -v $(CURDIR)/notebooks:/opt/notebooks ${IMG}:${VERSION} ${CMD}
+	docker run --rm -it \
+           --name jupyter \
+           -p 8000:8000 \
+           -v $(CURDIR)/notebooks:/opt/notebooks \
+           $(IMG):$(TAG) $(CMD)
 
 exec:
 	docker exec -it -u root jupyter bash
@@ -31,8 +35,8 @@ reset:
 	docker rm jupyter
 
 publish: build
-	docker push ${IMG}:${VERSION}
-	docker tag ${IMG}:${VERSION} ${IMG}:latest
-	if [ "${TAG}" != "" -a "${TAG}" != "${VERSION}" ]; then docker tag ${IMG}:${VERSION} ${IMG}:${TAG} && docker push ${IMG}:${TAG} && docker push ${IMG}:latest; fi
+	docker tag "$(IMG):$(TAG)" "$(IMGf):latest"
+	docker push "$(IMG):$(TAG)"
+	docker push "$(IMG):latest"
 
 test: build
